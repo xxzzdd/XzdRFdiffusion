@@ -29,3 +29,28 @@ cmd = [
     f"diffuser.T={timesteps}",
     f"contigmap.contigs={contig}",
 ]
+
+#批量运行保守结构的骨架生成
+
+conda run -n RFdiffusion python \
+  outputs/grft_6pocket/scripts/run_grft.py \
+  --route conservative \
+  --checkpoint ActiveSite_ckpt.pt \
+  --count 32 \
+  --start 1000 \
+  --label batch20 \
+  --timesteps 20 \
+  --output-dir \
+  outputs/grft_6pocket/route_conservative/raw
+
+
+
+#批量筛选合理结构蛋白文件
+cd /home/xzdxzdxzd/RFdiffusion
+
+conda run -n RFdiffusion python \
+  outputs/grft_6pocket/scripts/select_conservative.py \    #自定义筛选脚本
+  --candidates-csv outputs/grft_6pocket/reports/candidates.csv \    #获得所有蛋白的评分
+  --reference-dir outputs/grft_6pocket/reference \        #指定参考结构目录，进行二次比对打分
+  --output-dir outputs/grft_6pocket/finalists_conservative \
+  --count 5
