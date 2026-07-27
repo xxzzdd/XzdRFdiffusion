@@ -10,3 +10,22 @@ contig = (
     "B64-71/16/B88-91/14/B106-113/8"
     "]"
 )
+
+# 骨架生成
+cmd = [
+    "python", "scripts/run_inference.py",
+    "--config-name", "symmetry",
+
+    f"inference.input_pdb={motif_pdb}",
+    f"inference.output_prefix={output_prefix}",
+
+    "inference.symmetry=c2",
+    "inference.num_designs=1",
+    "inference.deterministic=True",
+#功能活性位点口袋保持活性
+    "inference.ckpt_override_path="
+        "models/ActiveSite_ckpt.pt",
+
+    f"diffuser.T={timesteps}",
+    f"contigmap.contigs={contig}",
+]
